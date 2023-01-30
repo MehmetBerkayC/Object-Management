@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class Game : MonoBehaviour
+public class Game : PersistableObject
 {
-    public Transform prefab;
+    public PersistableObject prefab;
 
     // Keys
     public KeyCode createKey = KeyCode.C;
@@ -14,13 +14,12 @@ public class Game : MonoBehaviour
     public KeyCode loadKey = KeyCode.L;
 
     // Memory
-    List<Transform> objects;
-    string savePath;
+    List<PersistableObject> objects;
+    public PersistantStorage storage;
 
     private void Awake()
     {
-        objects = new List<Transform>();
-        savePath = Path.Combine(Application.persistentDataPath, "saveFile");
+        objects = new List<PersistableObject>();
     }
 
     private void Update()
@@ -38,67 +37,25 @@ public class Game : MonoBehaviour
 
         if (Input.GetKeyDown(saveKey))
         {
-            Save();
+            storage.Save(this);
         }
         
         if (Input.GetKeyDown(loadKey))
         {
-            Load();
-        }
-    }
-
-    private void Save()
-    {
-        using (
-            var writer = new BinaryWriter(File.Open(savePath, FileMode.Create))
-            )
-        {
-            writer.Write(objects.Count);
-
-            for(int i = 0; i < objects.Count; i++)
-            {
-                Transform t = objects[i];
-                writer.Write(t.localPosition.x);
-                writer.Write(t.localPosition.y);
-                writer.Write(t.localPosition.z);
-            }
-        }
-
-        Debug.Log(savePath);
-    }
-
-    private void Load()
-    {
-        // Reset Scene
-        BeginNewGame();
-
-        using(var reader = new BinaryReader(File.Open(savePath, FileMode.Open)))
-        {
-            int count = reader.ReadInt32();
-
-            for(int i = 0; i < count; i++)
-            {
-                Vector3 p; // Position
-                p.x = reader.ReadSingle();
-                p.y = reader.ReadSingle();
-                p.z = reader.ReadSingle();
-
-                // Instantiate, reposition then save
-                Transform t = Instantiate(prefab);
-                t.localPosition = p;
-                objects.Add(t);
-            }
+            BeginNewGame();
+            storage.Load(this);
         }
     }
 
     private void CreateObject()
     {
-        Transform t = Instantiate(prefab);
+        PersistableObject o = Instantiate(prefab);
+        Transform t = o.transform;
         t.localPosition = Random.insideUnitSphere * 5f;
         t.localRotation = Random.rotation;
         t.localScale = Vector3.one * Random.Range(0.1f, 1f);
 
-        objects.Add(t);
+        objects.Add(o);
     }
 
     private void BeginNewGame()
