@@ -14,10 +14,17 @@ public class Game : PersistableObject
     public KeyCode newGameKey = KeyCode.N;
     public KeyCode saveKey = KeyCode.S;
     public KeyCode loadKey = KeyCode.L;
+    public KeyCode destroyKey = KeyCode.X;
 
     // Memory
     List<Shape> shapes;
     public PersistantStorage storage;
+
+    // GUI
+    public float CreationSpeed { get; set; }
+    float creationProgress;
+    public float DestructionSpeed { get; set; }
+    float destructionProgress;
 
     private void Awake()
     {
@@ -47,6 +54,25 @@ public class Game : PersistableObject
             BeginNewGame();
             storage.Load(this);
         }
+        
+        if (Input.GetKeyDown(destroyKey))
+        {
+            DestroyShape();
+        }
+
+        creationProgress += CreationSpeed * Time.deltaTime;
+        while(creationProgress >= 1f)
+        {
+            creationProgress -= 1f;
+            CreateShape();
+        }
+
+        destructionProgress += DestructionSpeed * Time.deltaTime;
+        while (destructionProgress >= 1f)
+        {
+            destructionProgress -= 1f;
+            DestroyShape();
+        }
     }
 
     private void CreateShape()
@@ -65,6 +91,20 @@ public class Game : PersistableObject
             ));
 
         shapes.Add(instance);
+    }
+
+    private void DestroyShape()
+    {
+        if(shapes.Count > 0)
+        {
+            int index = Random.Range(0, shapes.Count);
+            Destroy(shapes[index].gameObject);
+
+            // Removing the object frome list by putting it last then removing - no gaps in list -
+            int lastIndex = shapes.Count - 1;
+            shapes[index] = shapes[lastIndex];
+            shapes.RemoveAt(lastIndex);
+        }
     }
 
     private void BeginNewGame()
