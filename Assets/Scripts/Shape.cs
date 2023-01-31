@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class Shape : PersistableObject
 {
+    int shapeId = int.MinValue;
+
     // Using a property to set value once then make this field readonly
-    public int ShapeId {
-        get { 
-            return shapeId; 
+    public int ShapeId
+    {
+        get
+        {
+            return shapeId;
         }
-        
-        set {
-            if(shapeId == int.MinValue && value != int.MinValue)
+
+        set
+        {
+            if (shapeId == int.MinValue && value != int.MinValue)
             {
                 shapeId = value;
             }
@@ -22,5 +27,9 @@ public class Shape : PersistableObject
         }
     }
 
-    int shapeId = int.MinValue;
+    public int MaterialId { get; private set; }
+    public void SetMaterial(Material material, int materialId) {
+        GetComponent<MeshRenderer>().material = material;
+        MaterialId = materialId;
+    }
 }

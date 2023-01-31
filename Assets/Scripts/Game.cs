@@ -75,6 +75,7 @@ public class Game : PersistableObject
         writer.Write(shapes.Count);
         for(int i = 0; i < shapes.Count; i++)
         {
+            writer.Write(shapes[i].ShapeId);
             shapes[i].Save(writer);
         }
     }
@@ -82,12 +83,23 @@ public class Game : PersistableObject
     public override void Load(GameDataReader reader)
     {
         int version = -reader.ReadInt();
+        
+        if (version > saveVersion)
+        {
+            Debug.LogError("Unsupported future save version " + version);
+            return;
+        }
+
         // if it is an old savefile, version will be negative (reading old count value)
         // if this is the case "version" is actually object count of the old save, use that
         int count = version <= 0 ? -version : reader.ReadInt();
+
         for(int i = 0; i < count; i++)
         {
-            Shape instance = shapeFactory.Get(0);
+            // if old save file get cubes(0) else get shapeId
+            int shapeId = version > 0 ? reader.ReadInt() : 0;
+
+            Shape instance = shapeFactory.Get(shapeId);
             instance.Load(reader);
             shapes.Add(instance);
         }
