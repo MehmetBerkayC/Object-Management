@@ -98,7 +98,7 @@ public class Game : PersistableObject
         if(shapes.Count > 0)
         {
             int index = Random.Range(0, shapes.Count);
-            Destroy(shapes[index].gameObject);
+            shapeFactory.Reclaim(shapes[index]);
 
             // Removing the object frome list by putting it last then removing - no gaps in list -
             int lastIndex = shapes.Count - 1;
@@ -111,7 +111,7 @@ public class Game : PersistableObject
     {
         for(int i = 0; i < shapes.Count; i++)
         {
-            Destroy(shapes[i].gameObject);
+            shapeFactory.Reclaim(shapes[i]);
         }
         shapes.Clear();
     }
