@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Game : PersistableObject
 {
-    const int saveVersion = 1;
+    const int saveVersion = 2;
 
     public ShapeFactory shapeFactory;
 
@@ -27,10 +27,32 @@ public class Game : PersistableObject
     public float DestructionSpeed { get; set; }
     float destructionProgress;
 
-    private void Awake()
+    // Levels
+    public int levelCount;
+    private int loadedLevelBuildIndex;
+
+    private void Start()
     {
         shapes = new List<Shape>();
-        StartCoroutine(LoadLevel());
+
+        // in builds this won't be necessary cause there won't be a level already loaded
+        if (Application.isEditor)
+        {
+            // While working on the game, you already have the level open in editor,
+            // we don't want it load itself in playmode while there is a level already active in hierarchy
+            for(int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene loadedScene = SceneManager.GetSceneAt(i);
+                if(loadedScene.name.Contains("Level "))
+                {
+                    SceneManager.SetActiveScene(loadedScene);
+                    loadedLevelBuildIndex = loadedScene.buildIndex;
+                    return;
+                }
+            }
+        }
+
+        StartCoroutine(LoadLevel(1));
     }
 
     private void Update()
@@ -56,6 +78,17 @@ public class Game : PersistableObject
             BeginNewGame();
             storage.Load(this);
         }
+        
+        for(int i = 1; i <= levelCount; i++)
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha0 + i))
+            {
+                BeginNewGame();
+                StartCoroutine(LoadLevel(i));
+                return;
+            }
+        }
+        
         
         if (Input.GetKeyDown(destroyKey))
         {
@@ -121,6 +154,7 @@ public class Game : PersistableObject
     public override void Save(GameDataWriter writer)
     {
         writer.Write(shapes.Count);
+        writer.Write(loadedLevelBuildIndex);
         for(int i = 0; i < shapes.Count; i++)
         {
             writer.Write(shapes[i].ShapeId);
@@ -143,6 +177,8 @@ public class Game : PersistableObject
         // if this is the case "version" is actually object count of the old save, use that
         int count = version <= 0 ? -version : reader.ReadInt();
 
+        StartCoroutine(LoadLevel(version < 2 ? 1 : reader.ReadInt()));
+
         for(int i = 0; i < count; i++)
         {
             // if old save file get cubes(0) else get shapeId
@@ -154,11 +190,26 @@ public class Game : PersistableObject
         }
     }
 
-    private IEnumerator LoadLevel()
+    // While doing all this loading you would show a loading screen normally
+    private IEnumerator LoadLevel(int levelBuildIndex)
     {
-        SceneManager.LoadScene("Level 1", LoadSceneMode.Additive);
-        // wait for the next frame which the scene gets loaded (1frame)
-        yield return null;
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Level 1"));
+        // loading asyncronously means game won't freeze while loading scene but,
+        // Update() still is active, acquiring player inputs,
+        // to prevent this game needs to disable itself before beginning the loading and enable after loadingprocess 
+        enabled = false;
+
+        // if a level is already loaded while trying for a new one, unload it
+        if(loadedLevelBuildIndex > 0)
+        {
+            yield return SceneManager.UnloadSceneAsync(loadedLevelBuildIndex);
+        }
+
+        // wait for the scene to load (regular yield skips 1 frame exactly) so we can find and set the scene active
+        yield return SceneManager.LoadSceneAsync(levelBuildIndex, LoadSceneMode.Additive);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(levelBuildIndex));
+
+        loadedLevelBuildIndex = levelBuildIndex;
+
+        enabled = true;
     }
 }
