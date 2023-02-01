@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // This class doesn't need to be attached to a game object to work
 [CreateAssetMenu]
@@ -16,6 +17,8 @@ public class ShapeFactory : ScriptableObject
     bool recycle;
 
     List<Shape>[] pools;
+
+    Scene poolScene;
 
     public Shape Get(int shapeId = 0, int materialId = 0)
     {
@@ -40,6 +43,7 @@ public class ShapeFactory : ScriptableObject
             {
                 instance = Instantiate(prefabs[shapeId]);
                 instance.ShapeId = shapeId;
+                SceneManager.MoveGameObjectToScene(instance.gameObject, poolScene);
             }
         }
         else
@@ -83,5 +87,27 @@ public class ShapeFactory : ScriptableObject
         {
             pools[i] = new List<Shape>();
         }
+
+        if (Application.isEditor)
+        { 
+            poolScene = SceneManager.GetSceneByName(name);
+            // if there is already a scene after hotreload don't make a new one
+            if (poolScene.isLoaded)
+            {
+                GameObject[] rootObjects = poolScene.GetRootGameObjects();
+                for(int i = 0; i < rootObjects.Length; i++)
+                {
+                    Shape pooledShape = rootObjects[i].GetComponent<Shape>();
+                    if (!pooledShape.gameObject.activeSelf)
+                    {
+                        pools[pooledShape.ShapeId].Add(pooledShape);
+                    }
+                }
+                return;
+            }
+
+        }
+       
+        poolScene = SceneManager.CreateScene(name);
     }
 }

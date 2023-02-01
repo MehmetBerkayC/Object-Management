@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Game : PersistableObject
 {
@@ -29,6 +30,7 @@ public class Game : PersistableObject
     private void Awake()
     {
         shapes = new List<Shape>();
+        StartCoroutine(LoadLevel());
     }
 
     private void Update()
@@ -150,5 +152,13 @@ public class Game : PersistableObject
             instance.Load(reader);
             shapes.Add(instance);
         }
+    }
+
+    private IEnumerator LoadLevel()
+    {
+        SceneManager.LoadScene("Level 1", LoadSceneMode.Additive);
+        // wait for the next frame which the scene gets loaded (1frame)
+        yield return null;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Level 1"));
     }
 }
