@@ -8,18 +8,22 @@ public class Game : PersistableObject
 {
     const int saveVersion = 2;
 
-    public ShapeFactory shapeFactory;
+    [SerializeField] ShapeFactory shapeFactory;
+    
+    // Spawn 
+    public SpawnZone SpawnZoneOfLevel { get; set; }
+    public static Game Instance { get; private set; }
 
     // Keys
-    public KeyCode createKey = KeyCode.C;
-    public KeyCode newGameKey = KeyCode.N;
-    public KeyCode saveKey = KeyCode.S;
-    public KeyCode loadKey = KeyCode.L;
-    public KeyCode destroyKey = KeyCode.X;
+    [SerializeField] KeyCode createKey = KeyCode.C;
+    [SerializeField] KeyCode newGameKey = KeyCode.N;
+    [SerializeField] KeyCode saveKey = KeyCode.S;
+    [SerializeField] KeyCode loadKey = KeyCode.L;
+    [SerializeField] KeyCode destroyKey = KeyCode.X;
 
     // Memory
     List<Shape> shapes;
-    public PersistantStorage storage;
+    [SerializeField] PersistantStorage storage;
 
     // GUI
     public float CreationSpeed { get; set; }
@@ -28,11 +32,17 @@ public class Game : PersistableObject
     float destructionProgress;
 
     // Levels
-    public int levelCount;
+    [SerializeField] int levelCount;
     private int loadedLevelBuildIndex;
+
+    private void OnEnable()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
+
         shapes = new List<Shape>();
 
         // in builds this won't be necessary cause there won't be a level already loaded
@@ -114,7 +124,7 @@ public class Game : PersistableObject
     {
         Shape instance = shapeFactory.GetRandom();
         Transform t = instance.transform;
-        t.localPosition = Random.insideUnitSphere * 5f;
+        t.localPosition = SpawnZoneOfLevel.SpawnPoint;
         t.localRotation = Random.rotation;
         t.localScale = Vector3.one * Random.Range(0.1f, 1f);
 
