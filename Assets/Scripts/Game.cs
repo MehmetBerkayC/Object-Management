@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class Game : PersistableObject
 {
-    const int saveVersion = 2;
+    const int saveVersion = 3;
+
+    // Randomness
+    Random.State mainRandomState;
+    [SerializeField] bool reseedOnLoad;
 
     [SerializeField] ShapeFactory shapeFactory;
     
-    // Spawn 
-    public SpawnZone SpawnZoneOfLevel { get; set; }
-    public static Game Instance { get; private set; }
 
     // Keys
     [SerializeField] KeyCode createKey = KeyCode.C;
@@ -35,13 +36,10 @@ public class Game : PersistableObject
     [SerializeField] int levelCount;
     private int loadedLevelBuildIndex;
 
-    private void OnEnable()
-    {
-        Instance = this;
-    }
 
     private void Start()
     {
+        mainRandomState = Random.state;
 
         shapes = new List<Shape>();
 
@@ -62,6 +60,7 @@ public class Game : PersistableObject
             }
         }
 
+        BeginNewGame();
         StartCoroutine(LoadLevel(1));
     }
 
@@ -124,7 +123,7 @@ public class Game : PersistableObject
     {
         Shape instance = shapeFactory.GetRandom();
         Transform t = instance.transform;
-        t.localPosition = SpawnZoneOfLevel.SpawnPoint;
+        t.localPosition = GameLevel.Current.SpawnPoint;
         t.localRotation = Random.rotation;
         t.localScale = Vector3.one * Random.Range(0.1f, 1f);
 
@@ -154,6 +153,12 @@ public class Game : PersistableObject
 
     private void BeginNewGame()
     {
+        // Randomising games
+        Random.state = mainRandomState;
+        int seed = Random.Range(0, int.MaxValue) ^ (int)Time.unscaledTime;
+        mainRandomState = Random.state;
+        Random.InitState(seed);
+
         for(int i = 0; i < shapes.Count; i++)
         {
             shapeFactory.Reclaim(shapes[i]);
@@ -164,7 +169,9 @@ public class Game : PersistableObject
     public override void Save(GameDataWriter writer)
     {
         writer.Write(shapes.Count);
+        writer.Write(Random.state);
         writer.Write(loadedLevelBuildIndex);
+        GameLevel.Current.Save(writer);
         for(int i = 0; i < shapes.Count; i++)
         {
             writer.Write(shapes[i].ShapeId);
@@ -176,18 +183,38 @@ public class Game : PersistableObject
     public override void Load(GameDataReader reader)
     {
         int version = reader.Version;
-        
+
         if (version > saveVersion)
         {
             Debug.LogError("Unsupported future save version " + version);
             return;
         }
 
+        StartCoroutine(LoadGame(reader));
+    }
+    
+    IEnumerator LoadGame (GameDataReader reader)
+    {
+        int version = reader.Version;
+
         // if it is an old savefile, version will be negative (reading old count value)
         // if this is the case "version" is actually object count of the old save, use that
         int count = version <= 0 ? -version : reader.ReadInt();
 
-        StartCoroutine(LoadLevel(version < 2 ? 1 : reader.ReadInt()));
+        if(version >= 3)
+        {
+            Random.State state = reader.ReadRandomState();
+            if (!reseedOnLoad)
+            {
+                Random.state = state;
+            }
+        }
+
+        yield return LoadLevel(version < 2 ? 1 : reader.ReadInt());
+        if(version >= 3)
+        {
+            GameLevel.Current.Load(reader);
+        }
 
         for(int i = 0; i < count; i++)
         {
