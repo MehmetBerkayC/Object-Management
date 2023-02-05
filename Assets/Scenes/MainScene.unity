@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.13518642, g: 0.14576869, b: 0.13797703, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000002, guid: 2233c9697beeb544c9219f6579916e0d, type: 2}
+  m_LightingDataAsset: {fileID: 112000002, guid: 0d3137bda6c482d448cfb529d92c34bf, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -564,7 +564,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1397,6 +1397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eea45e5eb28d41c40a0eb7f1293254db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reseedOnLoad: 0
   shapeFactory: {fileID: 11400000, guid: 9da41d5a9311a4e4bb110b3926022cf8, type: 2}
   createKey: 99
   newGameKey: 110
@@ -1404,7 +1405,9 @@ MonoBehaviour:
   loadKey: 108
   destroyKey: 120
   storage: {fileID: 130096507}
-  levelCount: 3
+  creationSpeedSlider: {fileID: 1527303765}
+  destructionSpeedSlider: {fileID: 884339124}
+  levelCount: 4
 --- !u!4 &2013047154
 Transform:
   m_ObjectHideFlags: 0

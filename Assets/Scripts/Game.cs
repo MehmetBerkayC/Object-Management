@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Game : PersistableObject
@@ -31,6 +32,9 @@ public class Game : PersistableObject
     float creationProgress;
     public float DestructionSpeed { get; set; }
     float destructionProgress;
+
+    [SerializeField] Slider creationSpeedSlider;
+    [SerializeField] Slider destructionSpeedSlider;
 
     // Levels
     [SerializeField] int levelCount;
@@ -75,6 +79,7 @@ public class Game : PersistableObject
         if (Input.GetKeyDown(newGameKey))
         {
             BeginNewGame();
+            StartCoroutine(LoadLevel(loadedLevelBuildIndex));
         }
 
         if (Input.GetKeyDown(saveKey))
@@ -104,8 +109,13 @@ public class Game : PersistableObject
             DestroyShape();
         }
 
+  
+    }
+
+    private void FixedUpdate()
+    {
         creationProgress += CreationSpeed * Time.deltaTime;
-        while(creationProgress >= 1f)
+        while (creationProgress >= 1f)
         {
             creationProgress -= 1f;
             CreateShape();
@@ -159,6 +169,9 @@ public class Game : PersistableObject
         mainRandomState = Random.state;
         Random.InitState(seed);
 
+        creationSpeedSlider.value = CreationSpeed = 0;
+        destructionSpeedSlider.value = DestructionSpeed = 0;
+
         for(int i = 0; i < shapes.Count; i++)
         {
             shapeFactory.Reclaim(shapes[i]);
@@ -170,6 +183,10 @@ public class Game : PersistableObject
     {
         writer.Write(shapes.Count);
         writer.Write(Random.state);
+        writer.Write(CreationSpeed);
+        writer.Write(creationProgress);
+        writer.Write(DestructionSpeed);
+        writer.Write(destructionProgress);
         writer.Write(loadedLevelBuildIndex);
         GameLevel.Current.Save(writer);
         for(int i = 0; i < shapes.Count; i++)
@@ -208,6 +225,10 @@ public class Game : PersistableObject
             {
                 Random.state = state;
             }
+            creationSpeedSlider.value = CreationSpeed = reader.ReadFloat();
+            creationProgress = reader.ReadFloat();
+            destructionSpeedSlider.value = DestructionSpeed = reader.ReadFloat();
+            destructionProgress = reader.ReadFloat();
         }
 
         yield return LoadLevel(version < 2 ? 1 : reader.ReadInt());
