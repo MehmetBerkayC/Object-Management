@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Game : PersistableObject
 {
-    const int saveVersion = 3;
+    const int saveVersion = 4;
 
     // Randomness
     Random.State mainRandomState;
@@ -114,6 +114,13 @@ public class Game : PersistableObject
 
     private void FixedUpdate()
     {
+        // Update every shape in 1 fixedUpdate cycle -> Should be better performance
+        // also doing this before spawning new shapes keeps the behavior consistent with older versions
+        for(int i = 0; i < shapes.Count; i++)
+        {
+            shapes[i].GameUpdate();
+        }
+
         creationProgress += CreationSpeed * Time.deltaTime;
         while (creationProgress >= 1f)
         {
@@ -144,6 +151,7 @@ public class Game : PersistableObject
             alphaMin: 1f, alphaMax: 1f
             ));
 
+        instance.AngularVelocity = Random.onUnitSphere * Random.Range(0f, 90f);
         shapes.Add(instance);
     }
 

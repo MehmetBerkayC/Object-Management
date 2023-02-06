@@ -6,20 +6,6 @@ public class Shape : PersistableObject
 {
     int shapeId = int.MinValue;
 
-    Color color;
-
-    public int MaterialId { get; private set; }
-
-    MeshRenderer meshRenderer;
-
-    static int colorPropertyId = Shader.PropertyToID("_Color");
-    static MaterialPropertyBlock sharedPropertyBlock;
-
-    private void Awake()
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-    }
-
     // Using a property to set value once then make this field readonly
     public int ShapeId
     {
@@ -40,6 +26,27 @@ public class Shape : PersistableObject
             }
         }
     }
+
+    Color color;
+
+    public int MaterialId { get; private set; }
+
+    MeshRenderer meshRenderer;
+
+    static int colorPropertyId = Shader.PropertyToID("_Color");
+    static MaterialPropertyBlock sharedPropertyBlock;
+
+    public Vector3 AngularVelocity { get; set; }
+    private void Awake()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
+
+    public void GameUpdate()
+    {
+        transform.Rotate(Vector3.forward * 50f * Time.deltaTime);
+    }
+
 
     public void SetMaterial(Material material, int materialId) {
         meshRenderer.material = material;
@@ -62,11 +69,13 @@ public class Shape : PersistableObject
     {
         base.Save(writer);
         writer.Write(color);
+        writer.Write(AngularVelocity);
     }
 
     public override void Load(GameDataReader reader)
     {
         base.Load(reader);
         SetColor(reader.Version > 0 ? reader.ReadColor() : Color.white);
+        AngularVelocity = reader.Version >= 4 ? reader.ReadVector3() : Vector3.zero;
     }
 }
