@@ -152,6 +152,7 @@ public class Game : PersistableObject
             ));
 
         instance.AngularVelocity = Random.onUnitSphere * Random.Range(0f, 90f);
+        instance.Velocity = Random.onUnitSphere * Random.Range(0f, 2f);
         shapes.Add(instance);
     }
 

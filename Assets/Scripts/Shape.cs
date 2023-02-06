@@ -37,6 +37,9 @@ public class Shape : PersistableObject
     static MaterialPropertyBlock sharedPropertyBlock;
 
     public Vector3 AngularVelocity { get; set; }
+    public Vector3 Velocity { get; set; }
+
+
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
@@ -45,6 +48,8 @@ public class Shape : PersistableObject
     public void GameUpdate()
     {
         transform.Rotate(Vector3.forward * 50f * Time.deltaTime);
+        // localposition is better performance instead of position
+        transform.localPosition += Velocity * Time.deltaTime; 
     }
 
 
@@ -70,6 +75,7 @@ public class Shape : PersistableObject
         base.Save(writer);
         writer.Write(color);
         writer.Write(AngularVelocity);
+        writer.Write(Velocity);
     }
 
     public override void Load(GameDataReader reader)
@@ -77,5 +83,6 @@ public class Shape : PersistableObject
         base.Load(reader);
         SetColor(reader.Version > 0 ? reader.ReadColor() : Color.white);
         AngularVelocity = reader.Version >= 4 ? reader.ReadVector3() : Vector3.zero;
+        Velocity = reader.Version >= 4 ? reader.ReadVector3() : Vector3.zero;
     }
 }
