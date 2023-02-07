@@ -4,7 +4,18 @@ using UnityEngine;
 
 public abstract class SpawnZone : PersistableObject
 {
+    public enum SpawnMovementDirection
+    {
+        Forward,
+        Upward,
+        Outward,
+        Random
+    }
     public abstract Vector3 SpawnPoint { get; }
+
+    [SerializeField] SpawnMovementDirection spawnMovementDirection;
+
+    [SerializeField] FloatRange spawnSpeed;
 
     public virtual void ConfigureSpawn(Shape shape)
     {
@@ -21,7 +32,27 @@ public abstract class SpawnZone : PersistableObject
             ));
 
         shape.AngularVelocity = Random.onUnitSphere * Random.Range(0f, 90f);
-        shape.Velocity = transform.forward * Random.Range(0f, 2f);
+
+        Vector3 direction;
+        if(spawnMovementDirection == SpawnMovementDirection.Upward)
+        {
+            direction = transform.up;
+        }
+        else if(spawnMovementDirection == SpawnMovementDirection.Forward)
+        {
+            direction = transform.forward;
+        }
+        else if(spawnMovementDirection == SpawnMovementDirection.Outward)
+        {
+            direction = (t.localPosition - transform.position).normalized;
+        }
+        else
+        {
+            direction = Random.onUnitSphere;
+        }
+
+        shape.Velocity = direction * spawnSpeed.RandomValueInRange;
     }
+
 
 }

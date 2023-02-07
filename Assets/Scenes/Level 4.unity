@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7774d6279b7453841a4e061d26badd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnMovementDirection: 1
   surfaceOnly: 0
 --- !u!1 &256694046
 GameObject:
@@ -309,6 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45b33a63340c5f4a9eb2e6ed25fff02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnMovementDirection: 0
   spawnZones:
   - {fileID: 978934608}
   - {fileID: 229871413}
@@ -357,6 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7774d6279b7453841a4e061d26badd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnMovementDirection: 0
   surfaceOnly: 0
 --- !u!1 &1447663708
 GameObject:
