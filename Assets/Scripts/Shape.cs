@@ -104,7 +104,9 @@ public class Shape : PersistableObject
     public override void Save(GameDataWriter writer)
     {
         base.Save(writer);
-        
+
+        writer.Write(colors.Length);
+
         for(int i = 0; i < colors.Length; i++)
         {
             writer.Write(colors[i]);
@@ -120,10 +122,7 @@ public class Shape : PersistableObject
         
         if(reader.Version >= 5)
         {
-            for(int i = 0; i < colors.Length; i++)
-            {
-                SetColor(reader.ReadColor());
-            }
+            LoadColors(reader);
         }
         else
         {
@@ -132,5 +131,36 @@ public class Shape : PersistableObject
 
         AngularVelocity = reader.Version >= 4 ? reader.ReadVector3() : Vector3.zero;
         Velocity = reader.Version >= 4 ? reader.ReadVector3() : Vector3.zero;
+    }
+
+    private void LoadColors(GameDataReader reader)
+    {
+        int count = reader.ReadInt();
+        
+        int max = count <= colors.Length ? count : colors.Length;
+        int i = 0;
+        
+        // No problems here
+        for (; i < max; i++)
+        {
+            SetColor(reader.ReadColor(), i);
+        }
+
+        // If stored more colors than we currently need, we must read the rest of them
+        if (count > colors.Length)
+        {
+            for(; i < count; i++)
+            {
+                reader.ReadColor();
+            }
+        }
+        // If stored less colors than we need, need colors, must give a color
+        else if (count < colors.Length)
+        {
+            for(; i < colors.Length; i++)
+            {
+                SetColor(Color.white, i);
+            }
+        }
     }
 }
