@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Game : PersistableObject
 {
-    const int saveVersion = 4;
+    const int saveVersion = 5;
 
     // Randomness
     Random.State mainRandomState;
