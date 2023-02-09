@@ -30,6 +30,33 @@ public class Shape : PersistableObject
         }
     }
 
+    // Which Factory made this shape
+    ShapeFactory originFactory;
+    
+    public ShapeFactory OriginFactory
+    {
+        get
+        {
+            return originFactory;
+        }
+        set
+        {
+            if (originFactory == null)
+            {
+                originFactory = value;
+            }
+            else
+            {
+                Debug.LogError("Not allowed to change origin factory.");
+            }
+        }
+    }
+    
+    public void Recycle()
+    {
+        OriginFactory.Reclaim(this);
+    }
+
     // Material
     public int MaterialId { get; private set; }
 

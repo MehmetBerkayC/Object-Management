@@ -13,7 +13,7 @@ public class Game : PersistableObject
     Random.State mainRandomState;
     [SerializeField] bool reseedOnLoad;
 
-    [SerializeField] ShapeFactory shapeFactory;
+    [SerializeField] ShapeFactory[] shapeFactories;
     
 
     // Keys
@@ -40,6 +40,17 @@ public class Game : PersistableObject
     [SerializeField] int levelCount;
     private int loadedLevelBuildIndex;
 
+    private void OnEnable()
+    {
+        if(shapeFactories[0].FactoryId != 0)
+        {
+            for(int i = 0; i < shapeFactories.Length; i++)
+            {
+                shapeFactories[i].FactoryId = i;
+            }
+        }
+        
+    }
 
     private void Start()
     {
@@ -138,9 +149,7 @@ public class Game : PersistableObject
 
     private void CreateShape()
     {
-        Shape instance = shapeFactory.GetRandom();
-        GameLevel.Current.ConfigureSpawn(instance);
-        shapes.Add(instance);
+        shapes.Add(GameLevel.Current.SpawnShape());
     }
 
     private void DestroyShape()
@@ -148,7 +157,7 @@ public class Game : PersistableObject
         if(shapes.Count > 0)
         {
             int index = Random.Range(0, shapes.Count);
-            shapeFactory.Reclaim(shapes[index]);
+            shapes[index].Recycle();
 
             // Removing the object frome list by putting it last then removing - no gaps in list -
             int lastIndex = shapes.Count - 1;
@@ -170,7 +179,7 @@ public class Game : PersistableObject
 
         for(int i = 0; i < shapes.Count; i++)
         {
-            shapeFactory.Reclaim(shapes[i]);
+            shapes[i].Recycle();
         }
         shapes.Clear();
     }
@@ -187,6 +196,7 @@ public class Game : PersistableObject
         GameLevel.Current.Save(writer);
         for(int i = 0; i < shapes.Count; i++)
         {
+            writer.Write(shapes[i].OriginFactory.FactoryId);
             writer.Write(shapes[i].ShapeId);
             writer.Write(shapes[i].MaterialId);
             shapes[i].Save(writer);
@@ -235,10 +245,11 @@ public class Game : PersistableObject
 
         for(int i = 0; i < count; i++)
         {
+            int factoryId = version >= 5 ? reader.ReadInt() : 0;
             // if old save file get cubes(0) else get shapeId
             int shapeId = version > 0 ? reader.ReadInt() : 0;
             int materialId = version > 0 ? reader.ReadInt() : 0;
-            Shape instance = shapeFactory.Get(shapeId, materialId);
+            Shape instance = shapeFactories[factoryId].Get(shapeId, materialId);
             instance.Load(reader);
             shapes.Add(instance);
         }

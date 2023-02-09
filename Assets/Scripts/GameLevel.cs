@@ -20,9 +20,9 @@ public class GameLevel : PersistableObject
     }
 
 
-	public void ConfigureSpawn(Shape shape)
+	public Shape SpawnShape()
     {
-		spawnZone.ConfigureSpawn(shape);
+		return spawnZone.SpawnShape();
     }
 
 
