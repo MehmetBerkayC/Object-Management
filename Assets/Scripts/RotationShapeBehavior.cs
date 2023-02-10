@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotationShapeBehavior : ShapeBehavior
+// Sealed class means nothing can extend to it
+public sealed class RotationShapeBehavior : ShapeBehavior
 {
     public Vector3 AngularVelocity { get; set; }
 
@@ -12,6 +13,11 @@ public class RotationShapeBehavior : ShapeBehavior
         {
             return ShapeBehaviorType.Rotation;
         }
+    }
+
+    public override void Recycle()
+    {
+        ShapeBehaviorPool<RotationShapeBehavior>.Reclaim(this);
     }
 
     public override void GameUpdate(Shape shape)

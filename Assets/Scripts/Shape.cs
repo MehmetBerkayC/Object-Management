@@ -57,7 +57,7 @@ public class Shape : PersistableObject
         // When recycling behaviours get added again, to remove duplicates
         for(int i = 0; i< behaviorList.Count; i++)
         {
-            Destroy(behaviorList[i]);
+            behaviorList[i].Recycle();
         }
         behaviorList.Clear();
 
@@ -89,11 +89,24 @@ public class Shape : PersistableObject
     }
 
     // Check SpawnZone for usage
-    public T AddBehavior<T> () where T : ShapeBehavior
+    public T AddBehavior<T> () where T : ShapeBehavior, new()
     {
-        T behavior = gameObject.AddComponent<T>();
+        T behavior = ShapeBehaviorPool<T>.Get();
         behaviorList.Add(behavior);
         return behavior;
+    }
+
+    private ShapeBehavior AddBehavior(ShapeBehaviorType type)
+    {
+        switch (type)
+        {
+            case ShapeBehaviorType.Movement:
+                return AddBehavior<MovementShapeBehavior>();
+            case ShapeBehaviorType.Rotation:
+                return AddBehavior<RotationShapeBehavior>();
+        }
+        Debug.LogError("Forgot to support " + type);
+        return null;
     }
 
     public void SetMaterial(Material material, int materialId) {
@@ -189,18 +202,7 @@ public class Shape : PersistableObject
         }
     }
 
-    private ShapeBehavior AddBehavior(ShapeBehaviorType type)
-    {
-        switch (type)
-        {
-            case ShapeBehaviorType.Movement:
-                return AddBehavior<MovementShapeBehavior>();
-            case ShapeBehaviorType.Rotation:
-                return AddBehavior<RotationShapeBehavior>();
-        }
-        Debug.LogError("Forgot to support " + type);
-        return null;
-    }
+  
     private void LoadColors(GameDataReader reader)
     {
         int count = reader.ReadInt();
