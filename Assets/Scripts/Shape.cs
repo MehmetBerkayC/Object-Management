@@ -54,6 +54,13 @@ public class Shape : PersistableObject
     
     public void Recycle()
     {
+        // When recycling behaviours get added again, to remove duplicates
+        for(int i = 0; i< behaviorList.Count; i++)
+        {
+            Destroy(behaviorList[i]);
+        }
+        behaviorList.Clear();
+
         OriginFactory.Reclaim(this);
     }
 
@@ -69,6 +76,9 @@ public class Shape : PersistableObject
     public Vector3 AngularVelocity { get; set; }
     public Vector3 Velocity { get; set; }
 
+    // Behavior List
+    List<ShapeBehavior> behaviorList = new List<ShapeBehavior>();
+
     private void Awake()
     {
         colors = new Color[meshRenderers.Length];
@@ -76,11 +86,19 @@ public class Shape : PersistableObject
 
     public void GameUpdate()
     {
-        transform.Rotate(Vector3.forward * 50f * Time.deltaTime);
-        // localposition is better performance instead of position
-        transform.localPosition += Velocity * Time.deltaTime; 
+        for(int i = 0; i < behaviorList.Count; i++)
+        {
+            behaviorList[i].GameUpdate(this);
+        }
     }
 
+    // Check SpawnZone for usage
+    public T AddBehavior<T> () where T : ShapeBehavior
+    {
+        T behavior = gameObject.AddComponent<T>();
+        behaviorList.Add(behavior);
+        return behavior;
+    }
 
     public void SetMaterial(Material material, int materialId) {
         

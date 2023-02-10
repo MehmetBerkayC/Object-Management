@@ -56,8 +56,16 @@ public abstract class SpawnZone : PersistableObject
             }
         }
 
-        shape.AngularVelocity = Random.onUnitSphere * spawnConfig.angularSpeed.RandomValueInRange;
+        // Rotation
+        float angularSpeed = spawnConfig.angularSpeed.RandomValueInRange;
+        if(angularSpeed != 0f)
+        {
+            var rotation = shape.AddBehavior<RotationShapeBehavior>();
+            rotation.AngularVelocity = Random.onUnitSphere * angularSpeed;
+        }
 
+
+        // Movement
         Vector3 direction;
         switch (spawnConfig.movementDirection)
         {
@@ -75,7 +83,12 @@ public abstract class SpawnZone : PersistableObject
                 break;
         }
 
-        shape.Velocity = direction * spawnConfig.speed.RandomValueInRange;
+        float speed = spawnConfig.speed.RandomValueInRange;
+        if (speed != 0f)
+        {
+            var movement = shape.AddBehavior<MovementShapeBehavior>();
+            movement.Velocity = direction * speed;
+        }
 
         return shape;
     }
