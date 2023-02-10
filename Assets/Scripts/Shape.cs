@@ -72,10 +72,6 @@ public class Shape : PersistableObject
     static int colorPropertyId = Shader.PropertyToID("_Color");
     static MaterialPropertyBlock sharedPropertyBlock;
 
-    // Movement
-    public Vector3 AngularVelocity { get; set; }
-    public Vector3 Velocity { get; set; }
-
     // Behavior List
     List<ShapeBehavior> behaviorList = new List<ShapeBehavior>();
 
@@ -156,9 +152,13 @@ public class Shape : PersistableObject
         {
             writer.Write(colors[i]);
         }
-        
-        writer.Write(AngularVelocity);
-        writer.Write(Velocity);
+
+        writer.Write(behaviorList.Count);
+        for(int i = 0; i< behaviorList.Count; i++)
+        {
+            writer.Write((int)behaviorList[i].BehaviorType);
+            behaviorList[i].Save(writer);
+        }
     }
 
     public override void Load(GameDataReader reader)
@@ -174,10 +174,33 @@ public class Shape : PersistableObject
             SetColor(reader.Version > 0 ? reader.ReadColor() : Color.white);
         }
 
-        AngularVelocity = reader.Version >= 4 ? reader.ReadVector3() : Vector3.zero;
-        Velocity = reader.Version >= 4 ? reader.ReadVector3() : Vector3.zero;
+        if(reader.Version >= 6)
+        {
+            int behaviorCount = reader.ReadInt();
+            for (int i = 0; i < behaviorCount; i++)
+            {
+                AddBehavior((ShapeBehaviorType)reader.ReadInt()).Load(reader);
+            }
+        }
+        else if (reader.Version >= 4)
+        {
+            AddBehavior<RotationShapeBehavior>().AngularVelocity = reader.ReadVector3();
+            AddBehavior<MovementShapeBehavior>().Velocity = reader.ReadVector3();
+        }
     }
 
+    private ShapeBehavior AddBehavior(ShapeBehaviorType type)
+    {
+        switch (type)
+        {
+            case ShapeBehaviorType.Movement:
+                return AddBehavior<MovementShapeBehavior>();
+            case ShapeBehaviorType.Rotation:
+                return AddBehavior<RotationShapeBehavior>();
+        }
+        Debug.LogError("Forgot to support " + type);
+        return null;
+    }
     private void LoadColors(GameDataReader reader)
     {
         int count = reader.ReadInt();

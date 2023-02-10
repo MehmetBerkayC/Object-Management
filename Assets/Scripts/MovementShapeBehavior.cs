@@ -6,6 +6,14 @@ public class MovementShapeBehavior : ShapeBehavior
 {
     public Vector3 Velocity { get; set; }
 
+    public override ShapeBehaviorType BehaviorType
+    {
+        get
+        {
+            return ShapeBehaviorType.Movement;
+        }
+    }
+
     public override void GameUpdate(Shape shape)
     {
         shape.transform.localPosition += Velocity * Time.deltaTime;

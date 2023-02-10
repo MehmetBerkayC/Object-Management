@@ -15,7 +15,6 @@ public class Game : PersistableObject
 
     [SerializeField] ShapeFactory[] shapeFactories;
     
-
     // Keys
     [SerializeField] KeyCode createKey = KeyCode.C;
     [SerializeField] KeyCode newGameKey = KeyCode.N;
