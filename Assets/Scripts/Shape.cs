@@ -51,9 +51,13 @@ public class Shape : PersistableObject
             }
         }
     }
-    
+
+    public float Age { get; private set; }
+
     public void Recycle()
     {
+        Age = 0f;
+
         // When recycling behaviours get added again, to remove duplicates
         for(int i = 0; i< behaviorList.Count; i++)
         {
@@ -82,6 +86,7 @@ public class Shape : PersistableObject
 
     public void GameUpdate()
     {
+        Age += Time.deltaTime;
         for(int i = 0; i < behaviorList.Count; i++)
         {
             behaviorList[i].GameUpdate(this);
@@ -94,19 +99,6 @@ public class Shape : PersistableObject
         T behavior = ShapeBehaviorPool<T>.Get();
         behaviorList.Add(behavior);
         return behavior;
-    }
-
-    private ShapeBehavior AddBehavior(ShapeBehaviorType type)
-    {
-        switch (type)
-        {
-            case ShapeBehaviorType.Movement:
-                return AddBehavior<MovementShapeBehavior>();
-            case ShapeBehaviorType.Rotation:
-                return AddBehavior<RotationShapeBehavior>();
-        }
-        Debug.LogError("Forgot to support " + type);
-        return null;
     }
 
     public void SetMaterial(Material material, int materialId) {
@@ -166,6 +158,7 @@ public class Shape : PersistableObject
             writer.Write(colors[i]);
         }
 
+        writer.Write(Age);
         writer.Write(behaviorList.Count);
         for(int i = 0; i< behaviorList.Count; i++)
         {
@@ -189,10 +182,14 @@ public class Shape : PersistableObject
 
         if(reader.Version >= 6)
         {
+            Age = reader.ReadFloat();
             int behaviorCount = reader.ReadInt();
             for (int i = 0; i < behaviorCount; i++)
             {
-                AddBehavior((ShapeBehaviorType)reader.ReadInt()).Load(reader);
+                ShapeBehavior behavior = ((ShapeBehaviorType)reader.ReadInt()).GetInstance();
+                behaviorList.Add(behavior);
+                behavior.Load(reader);
+
             }
         }
         else if (reader.Version >= 4)
