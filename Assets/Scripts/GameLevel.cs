@@ -7,6 +7,16 @@ public class GameLevel : PersistableObject
 	[SerializeField]
 	SpawnZone spawnZone;
 
+    [SerializeField] int populationLimit;
+
+    public int PopolationLimit
+    {
+        get
+        {
+            return populationLimit;
+        }
+    }
+
 	[SerializeField] PersistableObject[] persistentObjects;
 	public static GameLevel Current { get; private set; }
 

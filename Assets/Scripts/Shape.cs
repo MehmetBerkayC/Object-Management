@@ -54,9 +54,14 @@ public class Shape : PersistableObject
 
     public float Age { get; private set; }
 
+    public int InstanceId { get; private set; }
+
+    public int SaveIndex { get; set; }
+    
     public void Recycle()
     {
         Age = 0f;
+        InstanceId += 1;
 
         // When recycling behaviours get added again, to remove duplicates
         for(int i = 0; i< behaviorList.Count; i++)
@@ -89,7 +94,11 @@ public class Shape : PersistableObject
         Age += Time.deltaTime;
         for(int i = 0; i < behaviorList.Count; i++)
         {
-            behaviorList[i].GameUpdate(this);
+            if (!behaviorList[i].GameUpdate(this))
+            {
+                behaviorList[i].Recycle();
+                behaviorList.RemoveAt(i--);
+            }
         }
     }
 
@@ -99,6 +108,14 @@ public class Shape : PersistableObject
         T behavior = ShapeBehaviorPool<T>.Get();
         behaviorList.Add(behavior);
         return behavior;
+    }
+
+    public void ResolveShapeInstances()
+    {
+        for(int i = 0; i < behaviorList.Count; i++)
+        {
+            behaviorList[i].ResolveShapeInstances();
+        }
     }
 
     public void SetMaterial(Material material, int materialId) {

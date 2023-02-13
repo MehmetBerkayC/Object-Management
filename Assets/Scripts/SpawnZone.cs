@@ -38,8 +38,11 @@ public abstract class SpawnZone : PersistableObject
         [System.Serializable]
         public struct SatelliteConfiguration
         {
+            public IntRange amount;
+         
             [FloatRangeSlider(0.1f, 1f)]
             public FloatRange relativeScale;
+
             public FloatRange orbitRadius;
             public FloatRange orbitFrequency;
         }
@@ -84,7 +87,11 @@ public abstract class SpawnZone : PersistableObject
         SetupOscillation(shape);
 
         // Satellites
-        CreateSatelliteFor(shape);
+        int satelliteCount = spawnConfig.satellite.amount.RandomValueInRange;
+        for(int i = 0; i < satelliteCount; i++)
+        {
+            CreateSatelliteFor(shape);
+        }
     }
 
     Vector3 GetDirectionVector(SpawnConfiguration.MovementDirection direction, Transform t)

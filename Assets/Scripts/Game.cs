@@ -148,11 +148,27 @@ public class Game : PersistableObject
             destructionProgress -= 1f;
             DestroyShape();
         }
+
+        // Limiting Shape Amount
+        int limit = GameLevel.Current.PopolationLimit;
+        if(limit > 0)
+        {
+            while(shapes.Count > limit)
+            {
+                DestroyShape();
+            }
+        }
     }
 
     public void AddShape(Shape shape)
     {
+        shape.SaveIndex = shapes.Count;
         shapes.Add(shape);
+    }
+
+    public Shape GetShape(int index)
+    {
+        return shapes[index];
     }
 
     private void DestroyShape()
@@ -164,6 +180,7 @@ public class Game : PersistableObject
 
             // Removing the object frome list by putting it last then removing - no gaps in list -
             int lastIndex = shapes.Count - 1;
+            shapes[lastIndex].SaveIndex = index;
             shapes[index] = shapes[lastIndex];
             shapes.RemoveAt(lastIndex);
         }
@@ -254,6 +271,11 @@ public class Game : PersistableObject
             int materialId = version > 0 ? reader.ReadInt() : 0;
             Shape instance = shapeFactories[factoryId].Get(shapeId, materialId);
             instance.Load(reader);
+        }
+
+        for(int i = 0; i < shapes.Count; i++)
+        {
+            shapes[i].ResolveShapeInstances();
         }
     }
 
