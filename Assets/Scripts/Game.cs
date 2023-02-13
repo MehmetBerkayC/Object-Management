@@ -26,6 +26,8 @@ public class Game : PersistableObject
 
     // Memory
     List<Shape> shapes;
+    List<ShapeInstance> killList;
+
     [SerializeField] PersistantStorage storage;
 
     // GUI
@@ -40,6 +42,8 @@ public class Game : PersistableObject
     // Levels
     [SerializeField] int levelCount;
     private int loadedLevelBuildIndex;
+
+    bool inGameUpdateLoop;
 
     private void OnEnable()
     {
@@ -60,6 +64,7 @@ public class Game : PersistableObject
         mainRandomState = Random.state;
 
         shapes = new List<Shape>();
+        killList = new List<ShapeInstance>();
 
         // in builds this won't be necessary cause there won't be a level already loaded
         if (Application.isEditor)
@@ -128,12 +133,16 @@ public class Game : PersistableObject
 
     private void FixedUpdate()
     {
+        // This bool is needed because the Kill method can interfere with this loop
+        inGameUpdateLoop = true;
         // Update every shape in 1 fixedUpdate cycle -> Should be better performance
         // also doing this before spawning new shapes keeps the behavior consistent with older versions
         for(int i = 0; i < shapes.Count; i++)
         {
             shapes[i].GameUpdate();
         }
+
+        inGameUpdateLoop = false;
 
         creationProgress += CreationSpeed * Time.deltaTime;
         while (creationProgress >= 1f)
@@ -158,6 +167,18 @@ public class Game : PersistableObject
                 DestroyShape();
             }
         }
+
+        if(killList.Count > 0)
+        {
+            for(int i = 0; i < killList.Count; i++)
+            {
+                if (killList[i].IsValid)
+                {
+                    KillImmediately(killList[i].Shape);
+                }
+            }
+            killList.Clear();
+        }
     }
 
     public void AddShape(Shape shape)
@@ -175,15 +196,32 @@ public class Game : PersistableObject
     {
         if(shapes.Count > 0)
         {
-            int index = Random.Range(0, shapes.Count);
-            shapes[index].Recycle();
-
-            // Removing the object frome list by putting it last then removing - no gaps in list -
-            int lastIndex = shapes.Count - 1;
-            shapes[lastIndex].SaveIndex = index;
-            shapes[index] = shapes[lastIndex];
-            shapes.RemoveAt(lastIndex);
+            Shape shape = shapes[Random.Range(0, shapes.Count)];
+            KillImmediately(shape);
         }
+    }
+
+    public void Kill(Shape shape)
+    {
+        if (inGameUpdateLoop)
+        {
+            killList.Add(shape);
+        }
+        else
+        {
+            KillImmediately(shape);
+        } 
+    }
+
+    private void KillImmediately(Shape shape)
+    {
+        // Removing the object frome list by putting it last then removing - no gaps in list -
+        int index = shape.SaveIndex;
+        shape.Recycle();
+        int lastIndex = shapes.Count - 1;
+        shapes[lastIndex].SaveIndex = index;
+        shapes[index] = shapes[lastIndex];
+        shapes.RemoveAt(lastIndex);
     }
 
     private void BeginNewGame()

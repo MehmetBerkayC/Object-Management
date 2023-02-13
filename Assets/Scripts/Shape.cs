@@ -110,6 +110,11 @@ public class Shape : PersistableObject
         return behavior;
     }
 
+    public void Die()
+    {
+        Game.Instance.Kill(this);
+    }
+
     public void ResolveShapeInstances()
     {
         for(int i = 0; i < behaviorList.Count; i++)

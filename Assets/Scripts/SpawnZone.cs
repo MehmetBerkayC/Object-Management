@@ -48,6 +48,30 @@ public abstract class SpawnZone : PersistableObject
         }
 
         public SatelliteConfiguration satellite;
+
+        // Object Lifecycle
+        [System.Serializable]
+        public struct LifecycleConfiguration
+        {
+            [FloatRangeSlider(0f, 2f)]
+            public FloatRange growingDuration;
+
+            [FloatRangeSlider(0f, 2f)]
+            public FloatRange dyingDuration;
+
+            public Vector2 RandomDurations
+            {
+                get
+                {
+                    return new Vector2(
+                        growingDuration.RandomValueInRange,
+                        dyingDuration.RandomValueInRange
+                    );
+                }
+            }
+        }
+
+        public LifecycleConfiguration lifecycle;
     }
 
     [SerializeField] SpawnConfiguration spawnConfig;
@@ -86,12 +110,20 @@ public abstract class SpawnZone : PersistableObject
 
         SetupOscillation(shape);
 
+        // For lifecycle growing - dying
+        Vector2 lifecycleDurations = spawnConfig.lifecycle.RandomDurations;
+
         // Satellites
         int satelliteCount = spawnConfig.satellite.amount.RandomValueInRange;
         for(int i = 0; i < satelliteCount; i++)
         {
-            CreateSatelliteFor(shape);
+            CreateSatelliteFor(shape, lifecycleDurations);
         }
+
+        // Create lifecycle for shape after its satellites done setups, 
+        // otherwise satellites scale gets calculated wrong,
+        // their scale depend on the focal shape!
+        SetupLifecycle(shape, lifecycleDurations);
     }
 
     Vector3 GetDirectionVector(SpawnConfiguration.MovementDirection direction, Transform t)
@@ -106,6 +138,21 @@ public abstract class SpawnZone : PersistableObject
                 return Random.onUnitSphere;
             default:
                 return transform.forward;
+        }
+    }
+
+    void SetupLifecycle(Shape shape, Vector2 growingDurations)
+    {
+        if (growingDurations.x > 0f)
+        {
+            shape.AddBehavior<GrowingShapeBehavior>().Initialize(
+                shape, growingDurations.x
+            );
+        }else if(growingDurations.y > 0f)
+        {
+            shape.AddBehavior<DyingShapeBehavior>().Initialize(
+                shape, growingDurations.y
+            );
         }
     }
 
@@ -137,7 +184,7 @@ public abstract class SpawnZone : PersistableObject
         }
     }
 
-    void CreateSatelliteFor(Shape focalShape)
+    void CreateSatelliteFor(Shape focalShape, Vector2 lifecycleDurations)
     {
         int factoryIndex = Random.Range(0, spawnConfig.factories.Length);
         Shape shape = spawnConfig.factories[factoryIndex].GetRandom();
@@ -149,6 +196,8 @@ public abstract class SpawnZone : PersistableObject
             spawnConfig.satellite.orbitRadius.RandomValueInRange, 
             spawnConfig.satellite.orbitFrequency.RandomValueInRange
             );
+
+        SetupLifecycle(shape, lifecycleDurations);
     }
 
 }
