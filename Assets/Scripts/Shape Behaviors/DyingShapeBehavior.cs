@@ -8,7 +8,7 @@ public class DyingShapeBehavior : ShapeBehavior
     {
         get
         {
-            return ShapeBehaviorType.Growing;
+            return ShapeBehaviorType.Dying;
         }
     }
 
@@ -53,6 +53,6 @@ public class DyingShapeBehavior : ShapeBehavior
     }
     public override void Recycle()
     {
-        ShapeBehaviorPool<GrowingShapeBehavior>.Reclaim(this);
+        ShapeBehaviorPool<DyingShapeBehavior>.Reclaim(this);
     }
 }

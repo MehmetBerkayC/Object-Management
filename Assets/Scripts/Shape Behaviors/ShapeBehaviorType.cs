@@ -9,7 +9,8 @@ public enum ShapeBehaviorType
     Oscillation,
 	Satellite,
 	Growing,
-	Dying
+	Dying,
+	Lifecycle
 }
 
 public static class ShapeBehaviorTypeMethods
@@ -30,6 +31,8 @@ public static class ShapeBehaviorTypeMethods
 				return ShapeBehaviorPool<GrowingShapeBehavior>.Get();
 			case ShapeBehaviorType.Dying:
 				return ShapeBehaviorPool<DyingShapeBehavior>.Get();
+			case ShapeBehaviorType.Lifecycle:
+				return ShapeBehaviorPool<LifecycleShapeBehavior>.Get();
 		}
 		UnityEngine.Debug.Log("Forgot to support " + type);
 		return null;
