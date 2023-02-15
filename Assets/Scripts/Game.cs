@@ -26,9 +26,12 @@ public class Game : PersistableObject
 
     // Memory
     List<Shape> shapes;
-    List<ShapeInstance> killList;
+    List<ShapeInstance> killList, markAsDyingList;
+    int dyingShapeCount;
 
     [SerializeField] PersistantStorage storage;
+
+    [SerializeField] float destroyDuration;
 
     // GUI
     public float CreationSpeed { get; set; }
@@ -65,6 +68,7 @@ public class Game : PersistableObject
 
         shapes = new List<Shape>();
         killList = new List<ShapeInstance>();
+        markAsDyingList = new List<ShapeInstance>();
 
         // in builds this won't be necessary cause there won't be a level already loaded
         if (Application.isEditor)
@@ -162,7 +166,7 @@ public class Game : PersistableObject
         int limit = GameLevel.Current.PopolationLimit;
         if(limit > 0)
         {
-            while(shapes.Count > limit)
+            while(shapes.Count - dyingShapeCount > limit)
             {
                 DestroyShape();
             }
@@ -179,6 +183,18 @@ public class Game : PersistableObject
             }
             killList.Clear();
         }
+
+        if(markAsDyingList.Count > 0)
+        {
+            for(int Ý = 0; Ý < markAsDyingList.Count; Ý++)
+            {
+                if (markAsDyingList[i].IsValid)
+                {
+                    MarkAsDyingImmediately(markAsDyingList[i].Shape);
+                }
+            }
+            markAsDyingList.Clear();
+        }
     }
 
     public void AddShape(Shape shape)
@@ -194,11 +210,48 @@ public class Game : PersistableObject
 
     private void DestroyShape()
     {
-        if(shapes.Count > 0)
+        if(shapes.Count - dyingShapeCount > 0)
         {
-            Shape shape = shapes[Random.Range(0, shapes.Count)];
-            KillImmediately(shape);
+            Shape shape = shapes[Random.Range(dyingShapeCount, shapes.Count)];
+           if(destroyDuration > 0)
+            {
+                KillImmediately(shape);
+            }
+            else
+            {
+                shape.AddBehavior<DyingShapeBehavior>().Initialize(shape, destroyDuration);
+            }
         }
+    }
+
+    public bool IsMarkedAsDying(Shape shape)
+    {
+        return shape.SaveIndex < dyingShapeCount;
+    }
+
+    public void MarkAsDying(Shape shape)
+    {
+        if (inGameUpdateLoop)
+        {
+            markAsDyingList.Add(shape);
+        }
+        else
+        {
+            MarkAsDyingImmediately(shape);
+        }
+    }
+
+    private void MarkAsDyingImmediately(Shape shape)
+    {
+        int index = shape.SaveIndex;
+        if(index < dyingShapeCount) // this shape already marked dying
+        {
+            return;
+        }
+        shapes[dyingShapeCount].SaveIndex = index;
+        shapes[index] = shapes[dyingShapeCount];
+        shape.SaveIndex = dyingShapeCount;
+        shapes[dyingShapeCount++] = shape;
     }
 
     public void Kill(Shape shape)
@@ -218,9 +271,23 @@ public class Game : PersistableObject
         // Removing the object frome list by putting it last then removing - no gaps in list -
         int index = shape.SaveIndex;
         shape.Recycle();
+
+        if(index < dyingShapeCount && index < --dyingShapeCount)
+        {
+            shapes[dyingShapeCount].SaveIndex = index;
+            shapes[index] = shapes[dyingShapeCount];
+            index = dyingShapeCount;
+        }
+
         int lastIndex = shapes.Count - 1;
-        shapes[lastIndex].SaveIndex = index;
-        shapes[index] = shapes[lastIndex];
+
+        // if there is at least a single non-dying shape move it to the end
+        // if not, the shape is already at the end of the list -no moving needed-
+        if (index < lastIndex) 
+        {
+            shapes[lastIndex].SaveIndex = index;
+            shapes[index] = shapes[lastIndex];
+        }
         shapes.RemoveAt(lastIndex);
     }
 
@@ -240,6 +307,8 @@ public class Game : PersistableObject
             shapes[i].Recycle();
         }
         shapes.Clear();
+
+        dyingShapeCount = 0;
     }
 
     public override void Save(GameDataWriter writer)

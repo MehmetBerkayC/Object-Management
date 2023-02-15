@@ -35,7 +35,10 @@ public class LifecycleShapeBehavior : ShapeBehavior
                 shape.Die();
                 return true;
             }
-            shape.AddBehavior<DyingShapeBehavior>().Initialize(shape, dyingDuration + dyingAge - shape.Age);
+            if (!shape.IsMarkedAsDying)
+            {
+                shape.AddBehavior<DyingShapeBehavior>().Initialize(shape, dyingDuration + dyingAge - shape.Age);
+            }
             return false;
         }
         return true;

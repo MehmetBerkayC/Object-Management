@@ -110,6 +110,19 @@ public class Shape : PersistableObject
         return behavior;
     }
 
+    public bool IsMarkedAsDying
+    {
+        get 
+        {
+            return Game.Instance.IsMarkedAsDying(this);
+        }
+    }
+
+    public void MarkAsDying()
+    {
+        Game.Instance.MarkAsDying(this);
+    }
+
     public void Die()
     {
         Game.Instance.Kill(this);
