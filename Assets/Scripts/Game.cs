@@ -186,7 +186,7 @@ public class Game : PersistableObject
 
         if(markAsDyingList.Count > 0)
         {
-            for(int Ý = 0; Ý < markAsDyingList.Count; Ý++)
+            for(int i = 0; i < markAsDyingList.Count; i++)
             {
                 if (markAsDyingList[i].IsValid)
                 {
