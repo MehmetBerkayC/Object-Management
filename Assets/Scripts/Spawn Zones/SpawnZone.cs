@@ -4,6 +4,10 @@ using UnityEngine;
 
 public abstract class SpawnZone : PersistableObject
 {
+    [SerializeField, Range(0f, 50f)]
+    float spawnSpeed;
+
+    float spawnProgress;
 
     [System.Serializable]
     public struct SpawnConfiguration
@@ -83,6 +87,30 @@ public abstract class SpawnZone : PersistableObject
     [SerializeField] SpawnConfiguration spawnConfig;
 
     public abstract Vector3 SpawnPoint { get; }
+
+    // Important:
+    // Every spawn zone that has a positive spawn speed,
+    // must be included in the persistent object list of its level,
+    // otherwise it won't be saved and loaded.
+    private void FixedUpdate()
+    {
+        spawnProgress += Time.deltaTime * spawnSpeed;
+        while(spawnProgress >= 1f)
+        {
+            spawnProgress -= 1f;
+            SpawnShapes();
+        }
+    }
+
+    public override void Save(GameDataWriter writer)
+    {
+        writer.Write(spawnProgress);
+    }
+
+    public override void Load(GameDataReader reader)
+    {
+        spawnProgress = reader.ReadFloat();
+    }
 
     public virtual void SpawnShapes()
     {
