@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3356668293296788273}
   - component: {fileID: 7334545359381664714}
   - component: {fileID: 78216996285997829}
-  - component: {fileID: 6132787765069931564}
   - component: {fileID: 4388023727441140421}
+  - component: {fileID: 2451731678905484157}
   m_Layer: 0
   m_Name: Composite Cube
   m_TagString: Untagged
@@ -87,19 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6132787765069931564
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3381166396159577119}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4388023727441140421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,6 +103,19 @@ MonoBehaviour:
   - {fileID: 78216996285997829}
   - {fileID: 4148924945922498636}
   - {fileID: 3963948480615855653}
+--- !u!135 &2451731678905484157
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381166396159577119}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &360531735013319860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -173,6 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -9123262228830225096, guid: 02617402afac1a242a29c8c212cdc6a9, type: 3}
+    - {fileID: 7537553501796320209, guid: 02617402afac1a242a29c8c212cdc6a9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 02617402afac1a242a29c8c212cdc6a9, type: 3}
 --- !u!4 &1590712638352150648 stripped
 Transform:
@@ -241,6 +242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -9123262228830225096, guid: 02617402afac1a242a29c8c212cdc6a9, type: 3}
+    - {fileID: 7537553501796320209, guid: 02617402afac1a242a29c8c212cdc6a9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 02617402afac1a242a29c8c212cdc6a9, type: 3}
 --- !u!4 &1766096955690010129 stripped
 Transform:

@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6141651611535867550}
   - component: {fileID: 2789734986041559899}
   - component: {fileID: 5799381495651591288}
-  - component: {fileID: 5179477105891450193}
   - component: {fileID: 7153552892252161689}
+  - component: {fileID: 3644626823438952112}
   m_Layer: 0
   m_Name: Composite Capsule
   m_TagString: Untagged
@@ -87,20 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5179477105891450193
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4074794796640873150}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7153552892252161689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,6 +103,19 @@ MonoBehaviour:
   - {fileID: 5799381495651591288}
   - {fileID: 5799381495462086986}
   - {fileID: 5799381495181576085}
+--- !u!135 &3644626823438952112
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4074794796640873150}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.9
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4915570650672698496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -178,6 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2842082538903748395, guid: 256ec2987e9973f4fb80fb19b77f8b89, type: 3}
+    - {fileID: 276601437926434019, guid: 256ec2987e9973f4fb80fb19b77f8b89, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 256ec2987e9973f4fb80fb19b77f8b89, type: 3}
 --- !u!23 &5799381495462086986 stripped
 MeshRenderer:
@@ -250,6 +250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2842082538903748395, guid: 256ec2987e9973f4fb80fb19b77f8b89, type: 3}
+    - {fileID: 276601437926434019, guid: 256ec2987e9973f4fb80fb19b77f8b89, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 256ec2987e9973f4fb80fb19b77f8b89, type: 3}
 --- !u!23 &5799381495181576085 stripped
 MeshRenderer:

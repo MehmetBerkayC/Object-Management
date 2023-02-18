@@ -123,51 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &71293651
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 71293653}
-  - component: {fileID: 71293652}
-  m_Layer: 0
-  m_Name: Spawn Zone 2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &71293652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 71293651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2785d60f6acc5549a73f63f4e73da9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  surfaceOnly: 1
---- !u!4 &71293653
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 71293651}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.5, y: -7.5, z: 19.75}
-  m_LocalScale: {x: 10, y: 10, z: 8}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &393132995
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,7 +134,7 @@ GameObject:
   - component: {fileID: 393132997}
   - component: {fileID: 393132998}
   m_Layer: 0
-  m_Name: Spawn Zone
+  m_Name: Spawn Zone Def
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,8 +148,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 393132995}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.5, y: -4, z: 11.5}
-  m_LocalScale: {x: 8, y: 5, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: 25}
+  m_LocalScale: {x: 20, y: 10, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -212,57 +167,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2785d60f6acc5549a73f63f4e73da9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnSpeed: 50
+  spawnConfig:
+    factories:
+    - {fileID: 11400000, guid: f11c3c6bf73d7f948bab12e43c6487cb, type: 2}
+    - {fileID: 11400000, guid: 9da41d5a9311a4e4bb110b3926022cf8, type: 2}
+    movementDirection: 1
+    speed:
+      min: 0
+      max: 2
+    angularSpeed:
+      min: 0
+      max: 5
+    scale:
+      min: 0
+      max: 2
+    color:
+      hue:
+        min: 0.1
+        max: 1
+      saturation:
+        min: 0.1
+        max: 1
+      value:
+        min: 0.3
+        max: 0.6
+    uniformColor: 0
+    oscillationDirection: 0
+    oscillationAmplitude:
+      min: 0
+      max: 0
+    oscillationFrequency:
+      min: 0
+      max: 0
+    satellite:
+      amount:
+        min: 0
+        max: 3
+      relativeScale:
+        min: 0.1
+        max: 0.4
+      orbitRadius:
+        min: 0
+        max: 0.2
+      orbitFrequency:
+        min: 0
+        max: 0.5
+      uniformLifecycles: 0
+    lifecycle:
+      growingDuration:
+        min: 0
+        max: 0
+      adultDuration:
+        min: 0
+        max: 0
+      dyingDuration:
+        min: 0
+        max: 0
   surfaceOnly: 0
---- !u!1 &538902789
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 538902791}
-  - component: {fileID: 538902790}
-  m_Layer: 0
-  m_Name: Composite Spawn Zone
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &538902790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 538902789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a45b33a63340c5f4a9eb2e6ed25fff02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnZones:
-  - {fileID: 393132998}
-  - {fileID: 71293652}
-  - {fileID: 1686574907}
-  - {fileID: 1215352413}
-  sequential: 0
---- !u!4 &538902791
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 538902789}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1215352412
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,8 +235,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1215352414}
   - component: {fileID: 1215352413}
-  m_Layer: 0
-  m_Name: Spawn Zone 4
+  m_Layer: 7
+  m_Name: Spawn Zone B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -292,6 +254,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7774d6279b7453841a4e061d26badd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnSpeed: 50
+  spawnConfig:
+    factories:
+    - {fileID: 11400000, guid: 9da41d5a9311a4e4bb110b3926022cf8, type: 2}
+    movementDirection: 1
+    speed:
+      min: 0
+      max: 2
+    angularSpeed:
+      min: 0
+      max: 5
+    scale:
+      min: 0
+      max: 2
+    color:
+      hue:
+        min: 0.1
+        max: 1
+      saturation:
+        min: 0.1
+        max: 1
+      value:
+        min: 0
+        max: 0.3
+    uniformColor: 1
+    oscillationDirection: 0
+    oscillationAmplitude:
+      min: 0
+      max: 0
+    oscillationFrequency:
+      min: 0
+      max: 0
+    satellite:
+      amount:
+        min: 0
+        max: 2
+      relativeScale:
+        min: 0.1
+        max: 0.3
+      orbitRadius:
+        min: 0
+        max: 0.5
+      orbitFrequency:
+        min: 0
+        max: 0.3
+      uniformLifecycles: 0
+    lifecycle:
+      growingDuration:
+        min: 0
+        max: 0
+      adultDuration:
+        min: 0
+        max: 0
+      dyingDuration:
+        min: 0
+        max: 0
   surfaceOnly: 0
 --- !u!4 &1215352414
 Transform:
@@ -300,13 +318,89 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1215352412}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.5, y: 4.5, z: 48.25}
-  m_LocalScale: {x: 10, y: 10, z: 8}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6, y: 10, z: 25}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1261317971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1261317975}
+  - component: {fileID: 1261317974}
+  - component: {fileID: 1261317973}
+  - component: {fileID: 1261317972}
+  m_Layer: 0
+  m_Name: Kill Zone Def
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!135 &1261317972
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261317971}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1261317973
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261317971}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1261317974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261317971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391ac79c6ba5f0b4f87213d062fb3ef4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dyingDuration: 1.5
+--- !u!4 &1261317975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261317971}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5, z: 25}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1686574906
 GameObject:
@@ -318,8 +412,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1686574908}
   - component: {fileID: 1686574907}
-  m_Layer: 0
-  m_Name: Spawn Zone 3
+  m_Layer: 6
+  m_Name: Spawn Zone A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,7 +431,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7774d6279b7453841a4e061d26badd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  surfaceOnly: 1
+  spawnSpeed: 50
+  spawnConfig:
+    factories:
+    - {fileID: 11400000, guid: f11c3c6bf73d7f948bab12e43c6487cb, type: 2}
+    movementDirection: 1
+    speed:
+      min: 0
+      max: 2
+    angularSpeed:
+      min: 0
+      max: 5
+    scale:
+      min: 0
+      max: 3
+    color:
+      hue:
+        min: 0.1
+        max: 1
+      saturation:
+        min: 0.1
+        max: 1
+      value:
+        min: 0.6
+        max: 1
+    uniformColor: 0
+    oscillationDirection: 0
+    oscillationAmplitude:
+      min: 0
+      max: 0
+    oscillationFrequency:
+      min: 0
+      max: 0
+    satellite:
+      amount:
+        min: 0
+        max: 2
+      relativeScale:
+        min: 0.1
+        max: 0.2
+      orbitRadius:
+        min: 0.1
+        max: 0.5
+      orbitFrequency:
+        min: 0.2
+        max: 0.4
+      uniformLifecycles: 0
+    lifecycle:
+      growingDuration:
+        min: 0
+        max: 1
+      adultDuration:
+        min: 0
+        max: 0
+      dyingDuration:
+        min: 0
+        max: 0
+  surfaceOnly: 0
 --- !u!4 &1686574908
 Transform:
   m_ObjectHideFlags: 0
@@ -345,13 +495,165 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686574906}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11, y: 5.25, z: 40}
-  m_LocalScale: {x: 10, y: 10, z: 8}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6, y: 10, z: 25}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1708997719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1708997723}
+  - component: {fileID: 1708997722}
+  - component: {fileID: 1708997721}
+  - component: {fileID: 1708997720}
+  m_Layer: 7
+  m_Name: Kill Zone B
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!135 &1708997720
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708997719}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1708997721
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708997719}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1708997722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708997719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391ac79c6ba5f0b4f87213d062fb3ef4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dyingDuration: 1.5
+--- !u!4 &1708997723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708997719}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6, y: 20, z: 25}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1872281788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1872281792}
+  - component: {fileID: 1872281791}
+  - component: {fileID: 1872281790}
+  - component: {fileID: 1872281789}
+  m_Layer: 6
+  m_Name: Kill Zone A
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!135 &1872281789
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872281788}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1872281790
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872281788}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1872281791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872281788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391ac79c6ba5f0b4f87213d062fb3ef4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dyingDuration: 1.5
+--- !u!4 &1872281792
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872281788}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6, y: 14, z: 25}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1897777275
 GameObject:
@@ -476,9 +778,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea681322d9087ca49a0498cdedaa7831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnZone: {fileID: 538902790}
+  spawnZone: {fileID: 0}
+  populationLimit: 0
   persistentObjects:
-  - {fileID: 538902790}
+  - {fileID: 0}
 --- !u!4 &1979167559
 Transform:
   m_ObjectHideFlags: 0

@@ -167,27 +167,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7774d6279b7453841a4e061d26badd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnSpeed: 50
   spawnConfig:
-    movementDirection: 0
+    factories:
+    - {fileID: 11400000, guid: f11c3c6bf73d7f948bab12e43c6487cb, type: 2}
+    - {fileID: 11400000, guid: 9da41d5a9311a4e4bb110b3926022cf8, type: 2}
+    movementDirection: 3
     speed:
       min: 0
-      max: 0
+      max: 2
     angularSpeed:
       min: 0
-      max: 0
+      max: 2
     scale:
       min: 0
-      max: 0
+      max: 2
     color:
       hue:
-        min: 0
-        max: 0
+        min: 0.1
+        max: 1
       saturation:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 1
       value:
+        min: 0.6
+        max: 1
+    uniformColor: 0
+    oscillationDirection: 0
+    oscillationAmplitude:
+      min: 0
+      max: 0
+    oscillationFrequency:
+      min: 0
+      max: 0
+    satellite:
+      amount:
         min: 0
-        max: 0
+        max: 3
+      relativeScale:
+        min: 0.1
+        max: 0.3
+      orbitRadius:
+        min: 0.1
+        max: 0.3
+      orbitFrequency:
+        min: 0
+        max: 2
+      uniformLifecycles: 0
+    lifecycle:
+      growingDuration:
+        min: 0
+        max: 2
+      adultDuration:
+        min: 0
+        max: 30
+      dyingDuration:
+        min: 0
+        max: 1
   surfaceOnly: 0
 --- !u!1 &256694046
 GameObject:
@@ -219,7 +255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnZone: {fileID: 358686258}
-  persistentObjects:
+  populationLimit: 0
+  levelObjects:
   - {fileID: 1447663709}
   - {fileID: 267452346}
   - {fileID: 358686258}
@@ -330,7 +367,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45b33a63340c5f4a9eb2e6ed25fff02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnSpeed: 1
   spawnConfig:
+    factories:
+    - {fileID: 11400000, guid: f11c3c6bf73d7f948bab12e43c6487cb, type: 2}
+    - {fileID: 11400000, guid: 9da41d5a9311a4e4bb110b3926022cf8, type: 2}
     movementDirection: 0
     speed:
       min: 0
@@ -344,18 +385,50 @@ MonoBehaviour:
     color:
       hue:
         min: 0
-        max: 0
+        max: 1
       saturation:
         min: 0
-        max: 0
+        max: 1
       value:
+        min: 0
+        max: 1
+    uniformColor: 0
+    oscillationDirection: 0
+    oscillationAmplitude:
+      min: 0
+      max: 0
+    oscillationFrequency:
+      min: 0
+      max: 0
+    satellite:
+      amount:
+        min: 0
+        max: 0
+      relativeScale:
+        min: 0
+        max: 0
+      orbitRadius:
+        min: 0
+        max: 0
+      orbitFrequency:
+        min: 0
+        max: 0
+      uniformLifecycles: 0
+    lifecycle:
+      growingDuration:
+        min: 0
+        max: 0
+      adultDuration:
+        min: 0
+        max: 0
+      dyingDuration:
         min: 0
         max: 0
   spawnZones:
   - {fileID: 978934608}
   - {fileID: 229871413}
-  sequential: 0
-  overrideConfig: 0
+  sequential: 1
+  overrideConfig: 1
 --- !u!1 &978934606
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,27 +473,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7774d6279b7453841a4e061d26badd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnSpeed: 50
   spawnConfig:
-    movementDirection: 0
+    factories:
+    - {fileID: 11400000, guid: f11c3c6bf73d7f948bab12e43c6487cb, type: 2}
+    - {fileID: 11400000, guid: 9da41d5a9311a4e4bb110b3926022cf8, type: 2}
+    movementDirection: 3
     speed:
       min: 0
-      max: 0
+      max: 2
     angularSpeed:
       min: 0
-      max: 0
+      max: 10
     scale:
       min: 0
-      max: 0
+      max: 2
     color:
       hue:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 1
       saturation:
-        min: 0
-        max: 0
+        min: 0.2
+        max: 1
       value:
+        min: 0.1
+        max: 1
+    uniformColor: 0
+    oscillationDirection: 0
+    oscillationAmplitude:
+      min: 0
+      max: 0
+    oscillationFrequency:
+      min: 0
+      max: 0
+    satellite:
+      amount:
         min: 0
-        max: 0
+        max: 2
+      relativeScale:
+        min: 0.1
+        max: 0.8
+      orbitRadius:
+        min: 0.5
+        max: 1
+      orbitFrequency:
+        min: 0
+        max: 2
+      uniformLifecycles: 0
+    lifecycle:
+      growingDuration:
+        min: 0
+        max: 2
+      adultDuration:
+        min: 0
+        max: 15
+      dyingDuration:
+        min: 0
+        max: 1
   surfaceOnly: 0
 --- !u!1 &1447663708
 GameObject:

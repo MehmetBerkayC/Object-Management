@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 224667252113414279}
   - component: {fileID: 224667252113414272}
   - component: {fileID: 224667252113414273}
-  - component: {fileID: 224667252113414274}
   - component: {fileID: 224667252113414278}
+  - component: {fileID: 1559421550011540783}
   m_Layer: 0
   m_Name: Sphere In Cube
   m_TagString: Untagged
@@ -86,19 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &224667252113414274
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224667252113414275}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &224667252113414278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +101,19 @@ MonoBehaviour:
   meshRenderers:
   - {fileID: 224667252113414273}
   - {fileID: 224667252330300601}
+--- !u!135 &1559421550011540783
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224667252113414275}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &224667252330300596
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: 224667252330300603}
   - component: {fileID: 224667252330300600}
   - component: {fileID: 224667252330300601}
-  - component: {fileID: 224667252330300602}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -198,16 +197,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &224667252330300602
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224667252330300596}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

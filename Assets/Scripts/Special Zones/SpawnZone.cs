@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SpawnZone : PersistableObject
+public abstract class SpawnZone : GameLevelObject
 {
     [SerializeField, Range(0f, 50f)]
     float spawnSpeed;
@@ -92,7 +92,7 @@ public abstract class SpawnZone : PersistableObject
     // Every spawn zone that has a positive spawn speed,
     // must be included in the persistent object list of its level,
     // otherwise it won't be saved and loaded.
-    private void FixedUpdate()
+    public override void GameUpdate()
     {
         spawnProgress += Time.deltaTime * spawnSpeed;
         while(spawnProgress >= 1f)
@@ -116,6 +116,8 @@ public abstract class SpawnZone : PersistableObject
     {
         int factoryIndex = Random.Range(0, spawnConfig.factories.Length);
         Shape shape = spawnConfig.factories[factoryIndex].GetRandom();
+        
+        shape.gameObject.layer = gameObject.layer;
 
         Transform t = shape.transform;
         t.localPosition = SpawnPoint;
@@ -240,6 +242,9 @@ public abstract class SpawnZone : PersistableObject
     {
         int factoryIndex = Random.Range(0, spawnConfig.factories.Length);
         Shape shape = spawnConfig.factories[factoryIndex].GetRandom();
+
+        shape.gameObject.layer = gameObject.layer;
+        
         Transform t = shape.transform;
         t.localRotation = Random.rotation;
         t.localScale = focalShape.transform.localScale * spawnConfig.satellite.relativeScale.RandomValueInRange;

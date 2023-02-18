@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatingObject : PersistableObject
+public class RotatingObject : GameLevelObject
 {
     [SerializeField] Vector3 angularVelocity;
 
-    private void FixedUpdate()
+    public override void GameUpdate()
     {
         transform.Rotate(angularVelocity * Time.deltaTime);
     }

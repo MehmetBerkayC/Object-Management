@@ -152,7 +152,7 @@ public class Game : PersistableObject
         while (creationProgress >= 1f)
         {
             creationProgress -= 1f;
-            GameLevel.Current.SpawnShapes();
+            GameLevel.Current.GameUpdate();
         }
 
         destructionProgress += DestructionSpeed * Time.deltaTime;
